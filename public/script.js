@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const email = document.querySelector('input[placeholder="Entrer votre adresse E-mail"]').value;
+        const email = document.querySelector('input[placeholder="E-mail de reception"]').value;
         const devise = document.getElementById('devise').value;
 
         const tickets = [];
