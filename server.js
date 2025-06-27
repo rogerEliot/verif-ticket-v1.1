@@ -3,12 +3,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 
-// const mongoose = require('mongoose'); // Commenté car MongoDB est temporairement ignoré
+const mongoose = require('mongoose'); // Commenté car MongoDB est temporairement ignoré
 
-// const mongoURI = process.env.MONGODB_URI;
-// mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-//   .then(() => console.log('Connecté à MongoDB'))
-//   .catch(err => console.error('Erreur de connexion MongoDB:', err));
+const mongoURI = process.env.MONGODB_URI;
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Connecté à MongoDB'))
+  .catch(err => console.error('Erreur de connexion MongoDB:', err));
 
 const port = process.env.PORT || 3000;
 
@@ -24,3 +24,4 @@ app.post('/submit', (req, res) => {
 app.listen(port, () => {
   console.log(`🚀 Serveur démarré sur le port ${port}`);
 });
+
