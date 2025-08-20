@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = await response.json();
             
             if (response.ok) {
-                alert("✅ Ticket en cours de vérification.\nUn email de confirmation sera envoyé à l'administrateur.");
+                alert("✅ Ticket en cours de vérification.\nUn email de confirmation vous sera envoyé.");
                 form.reset();
             } else {
                 // Afficher le message d'erreur du serveur s'il existe
