@@ -110,16 +110,53 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 1; i <= 3; i++) {
             const type = document.getElementById(`type${i}`).value;
             const code = document.getElementById(`code${i}`).value.trim();
+            const montantInput = document.getElementById(`montant${i}`);
+            const montant = parseFloat(montantInput.value) || 0;
             
-            // Si un des champs est rempli mais pas l'autre
-            if ((type && !code) || (!type && code)) {
-                showMessage(`Veuillez remplir tous les champs du ticket ${i}`, true);
-                toggleSubmitButton(false, 'Soumettre');
-                return;
-            }
+            // Réinitialiser les styles d'erreur
+            document.getElementById(`type${i}`).classList.remove('error');
+            document.getElementById(`code${i}`).classList.remove('error');
+            montantInput.classList.remove('error');
             
-            if (type && code) {
-                tickets.push({ type, code });
+            // Vérifier si au moins un champ est rempli
+            const hasAnyField = type || code || montantInput.value.trim() !== '';
+            
+            // Si au moins un champ est rempli, vérifier que tout est rempli
+            if (hasAnyField) {
+                let errorMessage = '';
+                
+                if (!type) {
+                    document.getElementById(`type${i}`).classList.add('error');
+                    errorMessage = `Veuillez sélectionner un type pour le ticket ${i}`;
+                } else if (!code) {
+                    document.getElementById(`code${i}`).classList.add('error');
+                    errorMessage = `Veuillez entrer un code pour le ticket ${i}`;
+                } else if (montant <= 0 || isNaN(montant)) {
+                    montantInput.classList.add('error');
+                    errorMessage = `Veuillez entrer un montant valide (supérieur à 0) pour le ticket ${i}`;
+                }
+                
+                if (errorMessage) {
+                    showMessage(errorMessage, true);
+                    toggleSubmitButton(false, 'Soumettre');
+                    
+                    // Faire défiler jusqu'au premier champ en erreur
+                    const firstError = document.querySelector('.error');
+                    if (firstError) {
+                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        firstError.focus();
+                    }
+                    
+                    return;
+                }
+                
+                // Formater le montant avec 2 décimales
+                const montantFormate = parseFloat(montant).toFixed(2);
+                tickets.push({ 
+                    type, 
+                    code, 
+                    montant: montantFormate 
+                });
             } else {
                 hasEmptyTicket = true;
             }
