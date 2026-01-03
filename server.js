@@ -423,7 +423,7 @@ const basicAuth = (req, res, next) => {
     }
 
     // Décodage de l'header (Basic base64)
-    const auth = new Buffer.from(authheader.split(' ')[1], 'base64').toString().split(':');
+    const auth = Buffer.from(authheader.split(' ')[1], 'base64').toString().split(':');
     const user = auth[0];
     const pass = auth[1];
 
