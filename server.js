@@ -319,8 +319,8 @@ app.post('/submit-ticket', async (req, res) => {
         // Envoi de l'e-mail au client
         try {
             const clientResponse = await apiInstance.sendTransacEmail(sendClientEmail);
-            console.log(`✉️ E-mail de confirmation envoyé au client: ${email}`, 
-                        `Message ID: ${clientResponse.messageId}`);
+            console.log(`✉️ E-mail de confirmation envoyé au client: ${email}`,
+                `Message ID: ${clientResponse.messageId}`);
         } catch (clientError) {
             console.error('❌ Erreur lors de l\'envoi de l\'email client:', {
                 error: clientError.message,
@@ -333,8 +333,8 @@ app.post('/submit-ticket', async (req, res) => {
         // Envoi de l'e-mail à l'administrateur
         try {
             const adminResponse = await apiInstance.sendTransacEmail(sendAdminEmail);
-            console.log(`✉️ E-mail de notification envoyé à l'admin: ${adminEmail}`, 
-                        `Message ID: ${adminResponse.messageId}`);
+            console.log(`✉️ E-mail de notification envoyé à l'admin: ${adminEmail}`,
+                `Message ID: ${adminResponse.messageId}`);
         } catch (adminError) {
             console.error('❌ Erreur lors de l\'envoi de l\'email admin:', {
                 error: adminError.message,
@@ -457,22 +457,70 @@ app.patch('/api/tickets/:id/status', async (req, res) => {
         console.log(`💾 Statut du ticket ${id} mis à jour avec succès en: ${status}`);
 
         // --- Envoi de l'e-mail de statut final au client ---
-        let emailSubject = `Votre demande de tickets (ID: ${ticket._id}) a été ${status === 'validated' ? 'validée' : 'refusée'}`;
+        let emailSubject = '';
+        let messageIntro = '';
+        let motifSection = '';
+
+        // Fonction pour masquer une partie du code (ex: 12345678 -> 12****78)
+        const maskCode = (code) => {
+            if (!code || code.length <= 4) return '****';
+            return code.substring(0, 2) + '*'.repeat(code.length - 4) + code.substring(code.length - 2);
+        };
+
+        if (status === 'validated') {
+            emailSubject = `✅ Votre ticket (ID: ${ticket._id}) a été VALIDÉ`;
+            messageIntro = `<p>Cher client, nous avons le plaisir de vous informer que votre ticket <strong>${maskCode(ticket.ticketsDetails[0]?.code)}</strong> (et autres associés) est <strong>valide</strong>.</p>`;
+            // Pas de motif spécial affiché en gros pour une validation, sauf si desired par l'utilisateur plus tard.
+        } else {
+            emailSubject = `❌ Votre ticket (ID: ${ticket._id}) a été REFUSÉ`;
+            messageIntro = `<p>Cher client, nous sommes désolés de vous annoncer que votre ticket <strong>${maskCode(ticket.ticketsDetails[0]?.code)}</strong> (et autres associés) est <strong>invalide</strong>.</p>`;
+            if (adminNotes) {
+                motifSection = `
+                    <div style="background-color: #ffebee; border-left: 4px solid #f44336; padding: 15px; margin: 20px 0; border-radius: 4px;">
+                        <strong>Motif du refus :</strong><br/>
+                        ${adminNotes}
+                    </div>
+                `;
+            }
+        }
+
         let emailContent = `
             <html>
+            <head>
+                <style>
+                    body { font-family: 'Helvetica', 'Arial', sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+                    .header { text-align: center; padding-bottom: 20px; border-bottom: 1px solid #eee; margin-bottom: 20px; }
+                    .footer { text-align: center; color: #999; font-size: 0.8em; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
+                    h1 { color: ${status === 'validated' ? '#2e7d32' : '#c62828'}; font-size: 24px; }
+                    ul { background: #f9f9f9; padding: 15px 20px; border-radius: 5px; list-style: none; }
+                    li { margin-bottom: 8px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+                    li:last-child { border-bottom: none; }
+                </style>
+            </head>
             <body>
-                <h1>Statut de votre demande de tickets</h1>
-                <p>Cher client,</p>
-                <p>Nous avons le plaisir de vous informer que votre demande de vérification de tickets (ID: <strong>${ticket._id}</strong>) a été <strong>${status === 'validated' ? 'validée' : 'refusée'}</strong>.</p>
-                ${adminNotes ? `<p><strong>Notes de l'administrateur:</strong> ${adminNotes}</p>` : ''}
-                <h2>Détails de votre demande:</h2>
-                <p><strong>Devise:</strong> ${ticket.devise}</p>
+                <div class="header">
+                    <h1>Statut de votre vérification</h1>
+                </div>
+                
+                ${messageIntro}
+                
+                ${motifSection}
+
+                <h3>Détails de votre demande :</h3>
                 <ul>
-                    ${ticket.ticketsDetails.map(t => `<li>Type: ${t.type}, Code: ${t.code}, Montant: ${t.montant}</li>`).join('')}
+                    <li><strong>Devise :</strong> ${ticket.devise}</li>
+                    ${ticket.ticketsDetails.map(t => `
+                        <li>
+                            <strong>${t.type}</strong> : ${maskCode(t.code)} - ${t.montant} ${ticket.devise}
+                        </li>
+                    `).join('')}
                 </ul>
-                <p>Si vous avez des questions, n'hésitez pas à nous contacter.</p>
-                <p>Cordialement,</p>
-                <p>L'équipe de support</p>
+
+                <p>Si vous avez des questions ou souhaitez effectuer une nouvelle vérification, n'hésitez pas à nous contacter ou à retourner sur notre site.</p>
+                
+                <div class="footer">
+                    <p>Cordialement,<br>L'équipe VerifTicket</p>
+                </div>
             </body>
             </html>
         `;
