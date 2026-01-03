@@ -459,7 +459,7 @@ app.get('/admin', basicAuth, (req, res) => {
 });
 
 // API pour récupérer tous les tickets (Protégée)
-app.get('/api/tickets', basicA  uth, async (req, res) => {
+app.get('/api/tickets', basicAuth, async (req, res) => {
     console.log('🔗 Requête GET reçue sur /api/tickets');
     try {
         const tickets = await Ticket.find().sort({ submissionDate: -1 }); // Tri par date de soumission descendante
