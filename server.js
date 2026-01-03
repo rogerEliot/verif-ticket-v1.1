@@ -410,15 +410,56 @@ app.post('/submit-ticket', async (req, res) => {
 });
 
 
+// --- Middleware d'Authentification Basic Auth ---
+const basicAuth = (req, res, next) => {
+    // Récupérer les identifiants depuis l'header Authorization
+    const authheader = req.headers.authorization;
+
+    if (!authheader) {
+        let err = new Error('You are not authenticated!');
+        res.setHeader('WWW-Authenticate', 'Basic');
+        err.status = 401;
+        return next(err);
+    }
+
+    // Décodage de l'header (Basic base64)
+    const auth = new Buffer.from(authheader.split(' ')[1], 'base64').toString().split(':');
+    const user = auth[0];
+    const pass = auth[1];
+
+    // Vérification des identifiants (depuis .env ou en dur si fallback nécessaire)
+    const adminUser = process.env.ADMIN_USER || 'admin';
+    const adminPass = process.env.ADMIN_PASS || 'admin';
+
+    if (user === adminUser && pass === adminPass) {
+        // Authentification réussie
+        next();
+    } else {
+        let err = new Error('You are not authenticated!');
+        res.setHeader('WWW-Authenticate', 'Basic');
+        err.status = 401;
+        return next(err);
+    }
+}
+
+// Middleware de gestion d'erreur pour l'auth
+app.use((err, req, res, next) => {
+    if (err.status === 401) {
+        res.status(401).send('Authentification requise pour accéder à cette interface.');
+    } else {
+        next(err);
+    }
+});
+
 // --- Routes pour l'interface Admin ---
 
-// Servir la page d'administration
-app.get('/admin', (req, res) => {
+// Servir la page d'administration (Protégée)
+app.get('/admin', basicAuth, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
-// API pour récupérer tous les tickets
-app.get('/api/tickets', async (req, res) => {
+// API pour récupérer tous les tickets (Protégée)
+app.get('/api/tickets', basicA  uth, async (req, res) => {
     console.log('🔗 Requête GET reçue sur /api/tickets');
     try {
         const tickets = await Ticket.find().sort({ submissionDate: -1 }); // Tri par date de soumission descendante
@@ -430,8 +471,8 @@ app.get('/api/tickets', async (req, res) => {
     }
 });
 
-// API pour mettre à jour le statut d'un ticket
-app.patch('/api/tickets/:id/status', async (req, res) => {
+// API pour mettre à jour le statut d'un ticket (Protégée)
+app.patch('/api/tickets/:id/status', basicAuth, async (req, res) => {
     const { id } = req.params;
     const { status, adminNotes } = req.body;
     console.log(`🔗 Requête PATCH reçue sur /api/tickets/${id}/status avec statut: ${status}, notes: "${adminNotes}"`);
