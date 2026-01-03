@@ -1,6 +1,7 @@
 <!-- public/admin.html -->
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,21 +14,26 @@
             background-color: #f4f4f4;
             color: #333;
         }
+
         .container {
             max-width: 1000px;
             margin: 20px auto;
             background: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        h1, h2 {
+
+        h1,
+        h2 {
             color: #0056b3;
             text-align: center;
         }
+
         .ticket-list {
             margin-top: 20px;
         }
+
         .ticket-card {
             background-color: #e9ecef;
             border: 1px solid #ced4da;
@@ -36,6 +42,7 @@
             margin-bottom: 15px;
             position: relative;
         }
+
         .ticket-card h3 {
             color: #007bff;
             margin-top: 0;
@@ -43,18 +50,22 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .ticket-card h3 span {
             font-size: 0.8em;
             color: #6c757d;
         }
+
         .ticket-card p {
             margin: 5px 0;
         }
+
         .ticket-card ul {
             list-style: none;
             padding: 0;
             margin-top: 10px;
         }
+
         .ticket-card ul li {
             background-color: #f8f9fa;
             border: 1px solid #dee2e6;
@@ -62,10 +73,12 @@
             margin-bottom: 5px;
             border-radius: 3px;
         }
+
         .ticket-card .actions {
             margin-top: 15px;
             text-align: right;
         }
+
         .ticket-card .actions button {
             padding: 8px 15px;
             border: none;
@@ -74,14 +87,17 @@
             font-size: 0.9em;
             margin-left: 10px;
         }
+
         .ticket-card .actions .validate {
             background-color: #28a745;
             color: white;
         }
+
         .ticket-card .actions .reject {
             background-color: #dc3545;
             color: white;
         }
+
         .ticket-card .status {
             position: absolute;
             top: 15px;
@@ -91,9 +107,19 @@
             font-weight: bold;
             color: white;
         }
-        .status-pending { background-color: #ffc107; }
-        .status-validated { background-color: #28a745; }
-        .status-rejected { background-color: #dc3545; }
+
+        .status-pending {
+            background-color: #ffc107;
+        }
+
+        .status-validated {
+            background-color: #28a745;
+        }
+
+        .status-rejected {
+            background-color: #dc3545;
+        }
+
         textarea {
             width: 100%;
             height: 60px;
@@ -103,39 +129,53 @@
             border-radius: 4px;
             resize: vertical;
         }
+
         .no-tickets {
             text-align: center;
             color: #6c757d;
             font-style: italic;
         }
+
         .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
             left: 0;
             top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
             padding-top: 60px;
         }
+
         .modal-content {
             background-color: #fefefe;
-            margin: 5% auto; /* 15% from the top and centered */
+            margin: 5% auto;
+            /* 15% from the top and centered */
             padding: 20px;
             border: 1px solid #888;
-            width: 80%; /* Could be more or less, depending on screen size */
+            width: 80%;
+            /* Could be more or less, depending on screen size */
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             position: relative;
         }
+
         .close-button {
             color: #aaa;
             float: right;
             font-size: 28px;
             font-weight: bold;
         }
+
         .close-button:hover,
         .close-button:focus {
             color: black;
@@ -144,10 +184,11 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Administration des Tickets</h1>
-        
+
         <h2>Tickets en attente</h2>
         <div id="pending-tickets" class="ticket-list">
             <p class="no-tickets">Chargement des tickets...</p>
@@ -192,7 +233,7 @@
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     const tickets = await response.json();
-                    
+
                     pendingTicketsDiv.innerHTML = '';
                     processedTicketsDiv.innerHTML = '';
 
@@ -251,8 +292,8 @@
                     </ul>
                     ${ticket.status === 'pending' ? `
                         <div class="actions">
-                            <button class="validate" data-id="${ticket._id}" data-action="validate">Valider</button>
-                            <button class="reject" data-id="${ticket._id}" data-action="reject">Refuser</button>
+                            <button class="validate" data-id="${ticket._id}" data-action="validated">Valider</button>
+                            <button class="reject" data-id="${ticket._id}" data-action="rejected">Refuser</button>
                         </div>
                     ` : `<p><strong>Date de traitement:</strong> ${validationDate}</p>`}
                 `;
@@ -325,4 +366,5 @@
         });
     </script>
 </body>
+
 </html>

